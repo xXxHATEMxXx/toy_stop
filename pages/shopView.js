@@ -37,7 +37,7 @@ function Copyright(props) {
 }
 
 
-export default function RobotView(props) {
+export default function ShopView(props) {
 
   const [termenalIn, setTermenalIn] = useState("")
   const { user,
