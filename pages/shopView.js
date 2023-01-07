@@ -44,10 +44,7 @@ export default function ShopView(props) {
     setCurrentpage,
     test,
     allData} = props
-  const sendTermenalCommand = () => {
-    user.send({ function: "termenalCommand", data: { command: termenalIn } })
-  }
-
+    console.log("allData");
   console.log(allData);
   return (
     <>
@@ -57,7 +54,7 @@ export default function ShopView(props) {
           {/* Chart */}
           {allData && allData.map(item =>{
             
-          return(<Grid key={"id" in item ? item.id : ""} item xs={12} md={4} lg={3}>
+          return(<Grid key={item.id} item xs={12} md={4} lg={3}>
               <Item item={item}  {...props}/>
           </Grid>)})}
         </Grid>

@@ -17,6 +17,7 @@ export default function Item(item, props) {
         setCurrentpage,
         test,
         allData} = props
+        console.log("item")
       console.log(item)
   return (
     <Card sx={{ maxWidth: 345 }}>
