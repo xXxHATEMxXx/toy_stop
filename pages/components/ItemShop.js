@@ -11,8 +11,9 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { IconButton } from '@mui/material';
 
 
-export default function ItemShop(itemShop, props) {
-    const { user,
+export default function ItemShop(props) {
+    const { itemShop, 
+        user,
         currentpage,
         setCurrentpage,
         test,
