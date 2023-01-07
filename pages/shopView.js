@@ -48,18 +48,7 @@ export default function ShopView(props) {
   console.log(allData);
   return (
     <>
-      <Toolbar />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Grid container spacing={3}>
-          {/* Chart */}
-          {allData && allData.map(item =>{
-            
-          return(<Grid key={item.id} item xs={12} md={4} lg={3}>
-              <ItemShop itemShop={item}  {...props}/>
-          </Grid>)})}
-        </Grid>
-        <Copyright sx={{ pt: 4 }} />
-      </Container>
+
     </>
   );
 }
