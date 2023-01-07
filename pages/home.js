@@ -557,7 +557,7 @@ export default function Main() {
             overflow: 'auto',
           }}
         >
-          <RobotView {...mainProps}/>
+          <ShopView {...mainProps}/>
         </Box>
       </Box>
     </ThemeProvider>
