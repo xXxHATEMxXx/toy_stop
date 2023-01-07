@@ -55,7 +55,7 @@ export default function ShopView(props) {
           {allData && allData.map(item =>{
             
           return(<Grid key={item.id} item xs={12} md={4} lg={3}>
-              <Item item={item}  {...props}/>
+              <ItemShop itemShop={item}  {...props}/>
           </Grid>)})}
         </Grid>
         <Copyright sx={{ pt: 4 }} />
