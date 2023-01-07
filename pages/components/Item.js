@@ -25,15 +25,15 @@ export default function Item(item, props) {
         component="img"
         alt={item.name}
         height="240"
-        image={"/images/" + item.item.imageName ? item.item.imageName : ""}
+        image={"/images/" + "imageName" in item.item ? item.item.imageName : ""}
         onClick={(e)=>{console.log(e)}}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {item.item.name ? item.item.name : ""}
+          {"name" in item.item  ? item.item.name : ""}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {item.item.description ? item.item.description : ""}
+          {"description" in item.item  ? item.item.description : ""}
         </Typography>
       </CardContent>
       <CardActions>
@@ -48,7 +48,7 @@ export default function Item(item, props) {
             <RemoveIcon/>
         </IconButton>
         <Typography variant="body2" color="text.secondary">
-          {item.item.price ? item.item.price : ""}
+          {"price"  in item.item ? item.item.price : ""}
         </Typography>
       </CardActions>
     </Card>

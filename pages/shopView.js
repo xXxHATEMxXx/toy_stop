@@ -58,9 +58,7 @@ export default function ShopView(props) {
         <Grid container spacing={3}>
           {/* Chart */}
           {allData && allData.map(item =>{
-              console.log(item.name)
-
-          return(<Grid key={item.id} item xs={12} md={4} lg={3}>
+          return(<Grid key={"id" in item ? item.id : ""} item xs={12} md={4} lg={3}>
               <Item item={item}  {...props}/>
           </Grid>)})}
         </Grid>
