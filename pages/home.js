@@ -419,7 +419,7 @@ const mdTheme = createTheme();
 export default function Main() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [currentpage, setCurrentpage] = useState("Home")
-  const [allData, setAllData] = useState([])
+  const [allData, setAllData] = useState([{id:0, name:"", imageName:"", description:"", price:0}])
   const { enqueueSnackbar } = useSnackbar();
   const addSnackBar = (msg, variant) => {
     enqueueSnackbar(msg, { variant: variant });
@@ -474,7 +474,7 @@ export default function Main() {
   useEffect(() => {
     const interval = setInterval(() => {
       // user.send({function:"ping", data:{message:""}})
-      if (user.isConnected && !allData) {
+      if (user.isConnected) {
           user.send({function:"getAllData", data:{}})
       }
 

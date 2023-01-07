@@ -39,7 +39,6 @@ function Copyright(props) {
 
 export default function ShopView(props) {
 
-  const [termenalIn, setTermenalIn] = useState("")
   const { user,
     currentpage,
     setCurrentpage,
@@ -49,7 +48,7 @@ export default function ShopView(props) {
     user.send({ function: "termenalCommand", data: { command: termenalIn } })
   }
 
-
+  console.log(allData);
   return (
     <>
       <Toolbar />
@@ -57,6 +56,7 @@ export default function ShopView(props) {
         <Grid container spacing={3}>
           {/* Chart */}
           {allData && allData.map(item =>{
+            
           return(<Grid key={"id" in item ? item.id : ""} item xs={12} md={4} lg={3}>
               <Item item={item}  {...props}/>
           </Grid>)})}
