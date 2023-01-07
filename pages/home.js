@@ -42,6 +42,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { saveAs } from 'file-saver';
 
 import ShopView from './shopView';
 
@@ -127,6 +128,9 @@ export const secondaryListItems = (
   </React.Fragment>
 );
 const drawerWidth = 240;
+
+ingify(jsonObject)], {type : 'application/json'});
+saveAs(blob, 'abc.json');
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -403,7 +407,151 @@ export default function Main() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [currentpage, setCurrentpage] = useState("Home")
   const [allData, setAllData] = useState([{id:0, name:"", imageName:"", description:"", price:0}])
-  const toggleDrawer = () => {
+  
+  const jsonObject =  [
+    {'id': 1,
+    'name': 'Teddy Bear',
+    'type': 'LotFancy',
+    'discripsion': 'A cute teddy bear',
+    'price': Decimal('14.99'),
+    'imageName': 'teddy-bear.png'
+    },
+    {'id': 2,
+    'name': 'Doll', 
+    'type': 'Barbie', 
+    'discripsion': 'A sweet doll', 
+    'price': Decimal('9.48'), 
+    'imageName': 'doll.png'
+    },
+    {'id': 3, 
+    'name': 'Toy Car 1', 
+    'type': 'Hot Wheels', 
+    'discripsion': 'A cute datsun toy car', 
+    'price': Decimal('57.14'), 
+    'imageName': 'toy-car-1.png'
+    },
+    {'id': 4, 
+    'name': 'Toy Car 2', 
+    'type': 'Hot Wheels', 
+    'discripsion': 'A cute ford toy truck', 
+    'price': Decimal('39.99'), 
+    'imageName': 'toy-car-2.png'
+    },
+    {'id': 5, 
+    'name': 'Toy Car 3', 
+    'type': 'Hot Wheels', 
+    'discripsion': 'A cute mercedes toy racecar', 
+    'price': Decimal('54.74'), 
+    'imageName': 'toy-car-3.png'
+    }, 
+    {'id': 6, 'name': 'Lego Classics', 
+    'type': 'Lego', 
+    'discripsion': 'A cute lego monsters set', 
+    'price': Decimal('9.97'), 
+    'imageName': 'lego-monsters.png'
+    },
+    {'id': 7, 
+    'name': 'Lego Dots', 
+    'type': 'Lego', 
+    'discripsion': 'A cute lego dots set', 
+    'price': Decimal('17.94'), 
+    'imageName': 'lego-dots.png'
+    }, 
+    {'id': 8, 
+    'name': 'Sweet Jumperoo', 
+    'type': 'Fisher-Price', 
+    'discripsion': 'A sweet ride jumperoo', 
+    'price': Decimal('124.99'), 
+    'imageName': 'ride-jumperoo.png'
+    }, 
+    {'id': 9, 
+    'name': 'Musical Keyboard', 
+    'type': 'CoComelon', 
+    'discripsion': 'A sweet musical keyboard', 
+    'price': Decimal('26.99'), 
+    'imageName': 'musical-keyboard.png'
+    }, 
+    {'id': 10, 
+    'name': 'T-Shirt & Shorts Set 1', 
+    'type': 'CoComelon', 
+    'discripsion': 'A sweet t-shirt & shorts set', 
+    'price': Decimal('18.99'), 
+    'imageName': 'tshirt-shorts-1.png'
+    }, 
+    {'id': 11, 
+    'name': 'T-Shirt & Shorts Set 2', 
+    'type': 'CoComelon', 
+    'discripsion': 'A sweet t-shirt & shorts set', 
+    'price': Decimal('18.99'), 
+    'imageName': 'tshirt-shorts-2.png'
+    }, 
+    {'id': 12, 
+    'name': 'T-Shirt & Shorts Set 3', 
+    'type': 'CoComelon', 
+    'discripsion': 'A sweet t-shirt & shorts set', 
+    'price': Decimal('18.99'), 
+    'imageName': 'tshirt-shorts-3.png'
+    }, 
+    {'id': 13, 
+    'name': 'N-Strike Blaster', 
+    'type': 'Nerf', 
+    'discripsion': 'A powerful blaster gun', 
+    'price': Decimal('34.99'), 
+    'imageName': 'strike-blaster.png'
+    }, 
+    {'id': 14, 
+    'name': 'Baby Mickey Mouse', 
+    'type': 'Disney', 
+    'discripsion': 'A sweet baby Mickey plush', 
+    'price': Decimal('18.88'), 
+    'imageName': 'baby-mickey.png'
+    }, 
+    {'id': 15, 
+    'name': 'Baby Minnie Mouse', 
+    'type': 'Disney', 
+    'discripsion': 'A sweet baby Minnie plush', 
+    'price': Decimal('51.23'), 
+    'imageName': 'baby-minnie.png'
+    }, 
+    {'id': 16, 
+    'name': '3D Toddler Scooter', 
+    'type': 'Bluey', 
+    'discripsion': 'A fantastic 3-wheel scooter', 
+    'price': Decimal('29.00'), 
+    'imageName': 'toddler-scooter.png'
+    }, 
+    {'id': 17, 
+    'name': 'Cottage Playhouse', 
+    'type': 'Litte Tikes', 
+    'discripsion': 'A fancy blue playhouse', 
+    'price': Decimal('139.99'), 
+    'imageName': 'cottage-playhouse.png'
+    }, 
+    {'id': 18, 
+    'name': '2-in-1 Motor/Wood Shop', 
+    'type': 'Little Tikes', 
+    'discripsion': 'A realistic motor/wood shop', 
+    'price': Decimal('99.00'), 
+    'imageName': '2x1-motor-shop.png'
+    }, 
+    {'id': 19, 
+    'name': 'UNO Collector Tin', 
+    'type': 'UNO', 
+    'discripsion': 'A premium quality uno set', 
+    'price': Decimal('49.39'), 
+    'imageName': 'uno-phase10-snappy.png'
+    }, 
+    {'id': 20, 
+    'name': 'Razor MX350 Bike', 
+    'type': 'Razor', 
+    'discripsion': 'A powerful electric bike', 
+    'price': Decimal('328.00'), 
+    'imageName': 'mx350-bike.png'
+    }
+    ]
+  
+    const blob = new Blob([JSON.stringify(jsonObject)], {type : 'application/json'});
+    saveAs(blob, 'abc.json');
     setDrawerOpen(!drawerOpen);
   };
   const handleServerResponse = (serverResponse) => {

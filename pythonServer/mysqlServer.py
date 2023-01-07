@@ -12,6 +12,7 @@ mycursor = mydb.cursor()
 mycursor.execute("SELECT * FROM items")
 
 myresult = mycursor.fetchall()
+print(myresult)
 
 allData = []
 for item in myresult:
