@@ -22,17 +22,17 @@ export default function Item(item, props) {
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
-        alt={"name" in item?.item ? item?.item?.name : ""}
+        alt={item?.item?.name}
         height="240"
-        image={"/images/" + ("imageName" in item?.item ? item.item.imageName : "")}
+        image={"/images/" + item.item.imageName}
         onClick={(e)=>{console.log(e)}}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {"name" in item?.item  ? item?.item?.name : ""}
+          {item?.item?.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {"description" in item?.item  ? item?.item?.description : ""}
+          {item?.item?.description}
         </Typography>
       </CardContent>
       <CardActions>
@@ -47,7 +47,7 @@ export default function Item(item, props) {
             <RemoveIcon/>
         </IconButton>
         <Typography variant="body2" color="text.secondary">
-          {"price"  in item?.item ? item?.item?.price : ""}
+          {item?.item?.price}
         </Typography>
       </CardActions>
     </Card>
