@@ -11,29 +11,29 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { IconButton } from '@mui/material';
 
 
-export default function Item(item, props) {
+export default function ItemShop(itemShop, props) {
     const { user,
         currentpage,
         setCurrentpage,
         test,
         allData} = props
-        console.log("item")
-      console.log(item)
+        console.log("itemShop")
+      console.log(itemShop)
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
-        alt={item?.item?.name}
+        alt={itemShop?.itemShop?.name}
         height="240"
-        image={"/images/" + item.item.imageName}
+        image={"/images/" + itemShop.itemShop.imageName}
         onClick={(e)=>{console.log(e)}}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {item?.item?.name}
+          {itemShop?.itemShop?.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {item?.item?.description}
+          {itemShop?.itemShop?.description}
         </Typography>
       </CardContent>
       <CardActions>
@@ -48,7 +48,7 @@ export default function Item(item, props) {
             <RemoveIcon/>
         </IconButton>
         <Typography variant="body2" color="text.secondary">
-          {item?.item?.price}
+          {itemShop?.itemShop?.price}
         </Typography>
       </CardActions>
     </Card>

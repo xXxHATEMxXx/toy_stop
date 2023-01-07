@@ -20,7 +20,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import { useState, useEffect } from 'react';
-import Item from './components/Item';
+import ItemShop from './components/ItemShop';
 
 
 function Copyright(props) {
