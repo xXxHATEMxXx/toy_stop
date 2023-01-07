@@ -466,7 +466,6 @@ export default function Main() {
     currentpage,
     setCurrentpage,
     test,
-    addSnackBar,
     allData
   }
 

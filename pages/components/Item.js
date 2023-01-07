@@ -16,7 +16,6 @@ export default function Item(item, props) {
         currentpage,
         setCurrentpage,
         test,
-        addSnackBar,
         allData} = props
 
   return (
@@ -25,7 +24,7 @@ export default function Item(item, props) {
         component="img"
         alt={item.name}
         height="240"
-        image={"/images/" + "imageName" in item.item ? item.item.imageName : ""}
+        image={"/images/" + ("imageName" in item.item ? item.item.imageName : "")}
         onClick={(e)=>{console.log(e)}}
       />
       <CardContent>

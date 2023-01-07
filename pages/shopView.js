@@ -44,7 +44,6 @@ export default function ShopView(props) {
     currentpage,
     setCurrentpage,
     test,
-    addSnackBar,
     allData} = props
   const sendTermenalCommand = () => {
     user.send({ function: "termenalCommand", data: { command: termenalIn } })
