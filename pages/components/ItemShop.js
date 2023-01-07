@@ -24,17 +24,17 @@ export default function ItemShop(props) {
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
-        alt={itemShop?.itemShop?.name}
+        alt={itemShop?.name}
         height="240"
         image={"/images/" + itemShop.itemShop.imageName}
         onClick={(e)=>{console.log(e)}}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {itemShop?.itemShop?.name}
+          {itemShop?.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {itemShop?.itemShop?.description}
+          {itemShop?.description}
         </Typography>
       </CardContent>
       <CardActions>
@@ -49,7 +49,7 @@ export default function ItemShop(props) {
             <RemoveIcon/>
         </IconButton>
         <Typography variant="body2" color="text.secondary">
-          {itemShop?.itemShop?.price}
+          {itemShop?.price}
         </Typography>
       </CardActions>
     </Card>
