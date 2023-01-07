@@ -173,8 +173,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 class User {
-  constructor(addSnackBar, handleServerResponse, forceRender) {
-    this.addSnackBar = addSnackBar
+  constructor(handleServerResponse, forceRender) {
     this.handleServerResponse = handleServerResponse
     this.forceRender = forceRender
     this.isConnected = false
@@ -186,7 +185,6 @@ class User {
 
   handleConntion() {
     if (!this.isConnected && !this.isTryingToConnect) {
-      this.addSnackBar("Trying To Connect...", "info")
       this.isTryingToConnect = true
       this.forceRender()
       try {
@@ -231,7 +229,6 @@ class User {
           this.forceRender()
         };
         this.socket.onerror = (error) => {
-          //this.addSnackBar(`[error] ${error.message}`);
           if (this.isConnected) {
             this.handleConnectionError()
           } else {
@@ -242,7 +239,6 @@ class User {
           this.forceRender()
         };
       } catch (e) {
-        this.addSnackBar(e)
         this.isTryingToConnect = false
         if (this.isConnected) {
           this.handleConnectionError()
@@ -253,36 +249,30 @@ class User {
       }
 
     } else {
-      this.addSnackBar("Already Connected", "success")
       this.forceRender()
     }
   }
 
   handleConnected() {
-    this.addSnackBar("Connected", "success")
     this.isConnected = true
   }
 
   handleDisconnected(clean) {
     if (clean) {
-      this.addSnackBar("Disconnected", "warning")
       this.isConnected = false
       this.handleSignOut()
     } else {
-      this.addSnackBar("Disconnected", "error")
       this.isConnected = false
       this.handleSignOut()
     }
   }
 
   handleUnableToConnect() {
-    this.addSnackBar("Unable To Connect", "error")
     this.isConnected = false
     this.handleSignOut()
   }
 
   handleConnectionError() {
-    this.addSnackBar("Connection Error", "error")
     this.isConnected = false
     this.handleSignOut()
   }
@@ -352,9 +342,7 @@ class User {
 
   onSignUp(serverResponse) {
     if (serverResponse.status === true) {
-      this.addSnackBar("Signed Up successfully", "success")
     } else {
-      this.addSnackBar("Fiald To Sign Up", "error")
     }
   }
 
@@ -373,10 +361,8 @@ class User {
 
   onSignIn(response) {
     if (response.status === true) {
-      this.addSnackBar("Signed In Successfully", "success")
       setSignIn(this.defaultData.input.signIn)
     } else {
-      this.addSnackBar(response.data.message, "error")
     }
   }
 
@@ -384,14 +370,12 @@ class User {
     if (this.isSignedIn) {
       this.isSignedIn = false
       this.socket.send(JSON.stringify({ function: "signOut", data: {} }))
-      this.addSnackBar("Signed Out", "warning")
     }
   }
 
   onSignOut() {
     this.socket.send(JSON.stringify({ function: "signOut", data: {} }))
     console.log(this.user)
-    this.addSnackBar("Signed Out", "warning")
   }
 
   connect() {
@@ -399,7 +383,6 @@ class User {
       this.handleConntion()
     }
     else {
-      this.addSnackBar("Already Trying To Connect", "info")
     }
   }
 
@@ -420,10 +403,6 @@ export default function Main() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [currentpage, setCurrentpage] = useState("Home")
   const [allData, setAllData] = useState([{id:0, name:"", imageName:"", description:"", price:0}])
-  const { enqueueSnackbar } = useSnackbar();
-  const addSnackBar = (msg, variant) => {
-    enqueueSnackbar(msg, { variant: variant });
-  };
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -457,7 +436,7 @@ export default function Main() {
   const forceRender = () => {
     setRenderForce(!renderForce)
   }
-  const [user, setUser] = useState(new User(addSnackBar, handleServerResponse, forceRender))
+  const [user, setUser] = useState(new User(handleServerResponse, forceRender))
   const test = () => {
     user.send({function:"getAllData", data:{}})
   }
