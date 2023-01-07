@@ -6,12 +6,7 @@ const nextConfig = {
     images: {
         unoptimized: true
     }
-},
- resolve: {
-  fallback: {
-      "fs": false
-  },
-}
-}
+
+}}
 
 module.exports = nextConfig
