@@ -17,22 +17,22 @@ export default function Item(item, props) {
         setCurrentpage,
         test,
         allData} = props
-
+      console.log(item)
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
-        alt={item.name}
+        alt={"name" in item?.item ? item?.item?.name : ""}
         height="240"
-        image={"/images/" + ("imageName" in item.item ? item.item.imageName : "")}
+        image={"/images/" + ("imageName" in item?.item ? item.item.imageName : "")}
         onClick={(e)=>{console.log(e)}}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {"name" in item.item  ? item.item.name : ""}
+          {"name" in item?.item  ? item?.item?.name : ""}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {"description" in item.item  ? item.item.description : ""}
+          {"description" in item?.item  ? item?.item?.description : ""}
         </Typography>
       </CardContent>
       <CardActions>
@@ -47,7 +47,7 @@ export default function Item(item, props) {
             <RemoveIcon/>
         </IconButton>
         <Typography variant="body2" color="text.secondary">
-          {"price"  in item.item ? item.item.price : ""}
+          {"price"  in item?.item ? item?.item?.price : ""}
         </Typography>
       </CardActions>
     </Card>
