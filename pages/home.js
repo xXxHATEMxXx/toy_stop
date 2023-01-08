@@ -46,6 +46,9 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import ShopView from './shopView';
+import FormControl from '@mui/material/FormControl';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 
 import { AllOutSharp } from '@mui/icons-material';
 
@@ -597,6 +600,12 @@ export default function Main() {
             <IconButton color="inherit" onClick={() => { user.connect(); }}>
               <SettingsInputAntennaIcon sx={{ color: user.isConnected ? "#3ba55d" : user.isTryingToConnect ? "#eea01a" : "#ed4245" }} />
             </IconButton>
+            <Link href='/signIn'>
+            
+            <IconButton color="inherit" onClick={() => { user.connect(); }}>
+              <SettingsInputAntennaIcon sx={{ color: user.isConnected ? "#3ba55d" : user.isTryingToConnect ? "#eea01a" : "#ed4245" }} />
+            </IconButton>
+            </Link>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={drawerOpen}>
@@ -619,11 +628,10 @@ export default function Main() {
             </ListSubheader>
             {user.isDataLoaded && Object.keys(listOfTypes).map((item, index) => {
               return (
-                <>
                   <FormControlLabel
                     value="end"
-                    key={item}
-                    control={<Checkbox key={item} onChange={e => {
+                    key={index}
+                    control={<Checkbox key={index} onChange={e => {
                       let list = listOfTypes
                       list[item] = e.target.checked
                       setListOfTypes(list)
@@ -643,7 +651,6 @@ export default function Main() {
                     }}
 
                   />
-                </>
 
               )
             })
@@ -652,8 +659,32 @@ export default function Main() {
 
             <Divider sx={{ my: 1 }} />
             <ListSubheader component="div" inset>
-              low
+              Sort By Price
             </ListSubheader>
+            <FormControl
+            >
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                onChange={e => {
+                  if (e.target.value =="htl"){
+                    setLabledData(labledData.sort((b, a) => {return a.price > b.price ? 1 : b.price > a.price ? -1 : 0}))
+                  }else{
+                    setLabledData(labledData.sort((a, b) => {return a.price > b.price ? 1 : b.price > a.price ? -1 : 0}))
+                  }
+                  forceRender()
+              }}
+              sx={{
+                ml: 3,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'left',
+              }}
+              >
+                <FormControlLabel value="htl" control={<Radio />} label="high to low" />
+                <FormControlLabel value="lth" control={<Radio />} label="low to high" />
+              </RadioGroup>
+            </FormControl>
             {secondaryListItems}
           </List>
         </Drawer>
