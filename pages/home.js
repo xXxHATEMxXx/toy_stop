@@ -205,7 +205,7 @@ class User {
     this.isTryingToConnect = false
     this.socket = null
     this.isDataLoaded = false
-    this.firstName = "guest"
+    this.firstName = "Guest"
     this.lastName = ""
     this.username = ""
 
@@ -459,8 +459,10 @@ export default function Main() {
   const [listOfTypes, setListOfTypes] = useState([])
   const { enqueueSnackbar } = useSnackbar();
   const [renderForce, setRenderForce] = useState(false)
-  const [openSignInDialog, setOpenSignInDialog]=useState(false)
-  const [openSignUpDialog, setOpenSignUpDialog]=useState(false)
+  const [openSignInDialog, setOpenSignInDialog] = useState(false)
+  const [openSignUpDialog, setOpenSignUpDialog] = useState(false)
+  const [openShoppingCartDialog, setOpenShoppingCartDialog] = useState(false)
+  
   const forceRender = () => {
     setRenderForce(!renderForce)
     console.log(renderForce)
@@ -476,15 +478,21 @@ export default function Main() {
     switch (serverResponse.function) {
 
       case "onSignIn":
-        if (serverResponse.data.status==2){
-          user.isSignedIn=true 
-          user.firstName=serverResponse.data.firstName
-          user.lastName=serverResponse.data.lastName
-          user.username=serverResponse.data.user
+        if (serverResponse.data.status == 0) {
+          user.isSignedIn = true
+          user.firstName = serverResponse.data.firstName
+          user.lastName = serverResponse.data.lastName
+          user.username = serverResponse.data.user
           addSnackBar("Signed in as " + serverResponse.data.user, "success")
           setOpenSignInDialog(false)
-          
 
+
+        }
+        else if (serverResponse.data.status == 1) {
+          addSnackBar("Wrong Password", "error")
+        }
+        else if (serverResponse.data.status == 2) {
+          addSnackBar("Wrong Username", "error")
         }
         break;
       case "onGetAllData":
@@ -538,7 +546,7 @@ export default function Main() {
   return (
     <ThemeProvider theme={mdTheme}>
       <SignInDialog openSignInDialog={openSignInDialog}
-                    setOpenSignInDialog={setOpenSignInDialog} {...mainProps}/>
+        setOpenSignInDialog={setOpenSignInDialog} {...mainProps} />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={drawerOpen}>
@@ -607,19 +615,19 @@ export default function Main() {
             <IconButton color="inherit" onClick={() => { user.connect(); }}>
               <SettingsInputAntennaIcon sx={{ color: user.isConnected ? "#3ba55d" : user.isTryingToConnect ? "#eea01a" : "#ed4245" }} />
             </IconButton>
-            
-            
-            <IconButton color="inherit" onClick={() => { 
-              if (!user.isSignedIn){
+
+
+            <IconButton color="inherit" onClick={() => {
+              if (!user.isSignedIn) {
                 setOpenSignInDialog(true)
               }
-              else{
+              else {
                 addSnackBar("Already Signed In", "info")
               }
-               }}>
+            }}>
               <AccountCircleIcon sx={{ color: user.isSignedIn ? "#3ba55d" : "#ed4245" }} />
             </IconButton>
-          
+
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={drawerOpen}>
@@ -636,35 +644,43 @@ export default function Main() {
             </IconButton>
           </Toolbar>
           <Divider />
+          
           <List component="nav">
+          <ListItemButton>
+            <ListItemIcon>
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary={user.firstName} />
+          </ListItemButton>
+          <Divider />
             <ListSubheader component="div" inset>
               Filler Type
             </ListSubheader>
             {user.isDataLoaded && Object.keys(listOfTypes).map((item, index) => {
               return (
-                  <FormControlLabel
-                    value="end"
-                    key={index}
-                    control={<Checkbox key={index} onChange={e => {
-                      let list = listOfTypes
-                      list[item] = e.target.checked
-                      setListOfTypes(list)
-                      if (Object.values(list).every(element => element === false)) {
-                        setLabledData(allData)
-                      } else (
-                        setLabledData(allData.filter((item) => { return (list[item?.type]) }))
-                      )
-                    }} />}
-                    label={item}
-                    labelPlacement="end"
-                    sx={{
-                      ml: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'left',
-                    }}
+                <FormControlLabel
+                  value="end"
+                  key={index}
+                  control={<Checkbox key={index} onChange={e => {
+                    let list = listOfTypes
+                    list[item] = e.target.checked
+                    setListOfTypes(list)
+                    if (Object.values(list).every(element => element === false)) {
+                      setLabledData(allData)
+                    } else (
+                      setLabledData(allData.filter((item) => { return (list[item?.type]) }))
+                    )
+                  }} />}
+                  label={item}
+                  labelPlacement="end"
+                  sx={{
+                    ml: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'left',
+                  }}
 
-                  />
+                />
 
               )
             })
@@ -681,19 +697,19 @@ export default function Main() {
                 aria-labelledby="demo-controlled-radio-buttons-group"
                 name="controlled-radio-buttons-group"
                 onChange={e => {
-                  if (e.target.value =="htl"){
-                    setLabledData(labledData.sort((b, a) => {return a.price > b.price ? 1 : b.price > a.price ? -1 : 0}))
-                  }else{
-                    setLabledData(labledData.sort((a, b) => {return a.price > b.price ? 1 : b.price > a.price ? -1 : 0}))
+                  if (e.target.value == "htl") {
+                    setLabledData(labledData.sort((b, a) => { return a.price > b.price ? 1 : b.price > a.price ? -1 : 0 }))
+                  } else {
+                    setLabledData(labledData.sort((a, b) => { return a.price > b.price ? 1 : b.price > a.price ? -1 : 0 }))
                   }
                   forceRender()
-              }}
-              sx={{
-                ml: 3,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'left',
-              }}
+                }}
+                sx={{
+                  ml: 3,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'left',
+                }}
               >
                 <FormControlLabel value="htl" control={<Radio />} label="high to low" />
                 <FormControlLabel value="lth" control={<Radio />} label="low to high" />

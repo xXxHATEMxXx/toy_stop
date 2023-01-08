@@ -28,18 +28,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function SignInDialog(props) {
   const { 
-    openSignInDialog,
-    setOpenSignInDialog,
+    openShoppingCartDialog,
+    setOpenShoppingCartDialog,
     user,
     currentpage,
     setCurrentpage,
     test,
     labledData } = props
 
-const handleCloseSignInDialog=()=>{
-  setOpenSignInDialog(false)
+  const handleCloseSignInDialog = () => {
+    setOpenSignInDialog(false)
 
-}
+  }
   return (
     <Dialog
       fullScreen
@@ -58,12 +58,12 @@ const handleCloseSignInDialog=()=>{
             <CloseIcon />
           </IconButton>
           <Typography dir="rtl" sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            
+
           </Typography>
         </Toolbar>
       </AppBar>
-    <SignIn {...props}/>
-    
+      <SignIn {...props} />
+
     </Dialog>
   );
 }

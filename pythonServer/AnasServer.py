@@ -35,7 +35,7 @@ class AnasServer():
             # This Code will run when a messeage is recived
             #print("recived :" + message)
             message = json.loads(message)
-            await client.send(self.resposeFunctions[message["function"]](message["data"]))
+            await client.send(self.resposeFunctions[message["function"]](message["data"], client))
             """ try:
                 pass
             except:

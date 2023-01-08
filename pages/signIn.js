@@ -29,7 +29,10 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn(props) {
-  const { openSignInDialog, setOpenSignInDialog, user,
+  const { 
+    openSignInDialog,
+    setOpenSignInDialog, 
+    user,
     currentpage,
     setCurrentpage,
     test,

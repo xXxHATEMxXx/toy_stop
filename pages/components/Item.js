@@ -13,44 +13,46 @@ import { IconButton } from '@mui/material';
 
 
 
-export default function Item(item, props) {
-    const { user,
-        currentpage,
-        setCurrentpage,
-        test,
-        labledData} = props
+export default function Item(props) {
+  const {
+    item,
+    user,
+    currentpage,
+    setCurrentpage,
+    test,
+    labledData } = props
   return (
-  
-  
+
+
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
-        alt={item?.item?.name}
+        alt={item?.name}
         height="270"
-        image={"/images/" + item.item.imageName}
-        onClick={(e)=>{console.log(e)}}
+        image={"/images/" + item?.imageName}
+        onClick={(e) => { console.log(e) }}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {item?.item?.name}
+          {item?.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {item?.item?.description}
+          {item?.description}
         </Typography>
       </CardContent>
       <CardActions>
         <IconButton onClick={(e) => {
-            console.log(e)
+          user.send({ function: "addToCart", data: { mode: "+", itemId: item?.id } })
         }}>
-            <AddIcon/>
+          <AddIcon />
         </IconButton>
         <IconButton onClick={(e) => {
-            
+          user.send({ function: "addToCart", data: { mode: "-", itemId: item?.id } })
         }}>
-            <RemoveIcon/>
+          <RemoveIcon />
         </IconButton>
         <Typography variant="body1" color="text.primary">
-          {item?.item?.price}
+          {item?.price}
         </Typography>
       </CardActions>
     </Card>
