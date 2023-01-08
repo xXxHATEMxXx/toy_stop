@@ -49,8 +49,10 @@ import ShopView from './shopView';
 import FormControl from '@mui/material/FormControl';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { AllOutSharp } from '@mui/icons-material';
+import SignInDialog from './signInDialog';
 
 export const nbaTeams = [
   { id: 1, name: '10' },
@@ -203,6 +205,9 @@ class User {
     this.isTryingToConnect = false
     this.socket = null
     this.isDataLoaded = false
+    this.firstName = "guest"
+    this.lastName = ""
+    this.username = ""
 
   }
 
@@ -454,6 +459,8 @@ export default function Main() {
   const [listOfTypes, setListOfTypes] = useState([])
   const { enqueueSnackbar } = useSnackbar();
   const [renderForce, setRenderForce] = useState(false)
+  const [openSignInDialog, setOpenSignInDialog]=useState(false)
+  const [openSignUpDialog, setOpenSignUpDialog]=useState(false)
   const forceRender = () => {
     setRenderForce(!renderForce)
     console.log(renderForce)
@@ -467,20 +474,18 @@ export default function Main() {
   const handleServerResponse = (serverResponse) => {
     console.log(serverResponse)
     switch (serverResponse.function) {
-      case "message":
-        addSnackBar(serverResponse.data.message, serverResponse.data.variant)
-        break;
-      case "signUp":
-        user.onSignUp(serverResponse)
-        break;
-      case "signIn":
-        user.onSignIn(serverResponse)
-        break;
-      case "signOut":
-        user.onSignOut()
-        break;
-      case "disconnect":
-        user.handleDisconnected(true)
+
+      case "onSignIn":
+        if (serverResponse.data.status==2){
+          user.isSignedIn=true 
+          user.firstName=serverResponse.data.firstName
+          user.lastName=serverResponse.data.lastName
+          user.username=serverResponse.data.user
+          addSnackBar("Signed in as " + serverResponse.data.user, "success")
+          setOpenSignInDialog(false)
+          
+
+        }
         break;
       case "onGetAllData":
         setAllData(serverResponse.data.allData)
@@ -532,6 +537,8 @@ export default function Main() {
   }, [])
   return (
     <ThemeProvider theme={mdTheme}>
+      <SignInDialog openSignInDialog={openSignInDialog}
+                    setOpenSignInDialog={setOpenSignInDialog} {...mainProps}/>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={drawerOpen}>
@@ -600,12 +607,19 @@ export default function Main() {
             <IconButton color="inherit" onClick={() => { user.connect(); }}>
               <SettingsInputAntennaIcon sx={{ color: user.isConnected ? "#3ba55d" : user.isTryingToConnect ? "#eea01a" : "#ed4245" }} />
             </IconButton>
-            <Link href='/signIn'>
             
-            <IconButton color="inherit" onClick={() => { user.connect(); }}>
-              <SettingsInputAntennaIcon sx={{ color: user.isConnected ? "#3ba55d" : user.isTryingToConnect ? "#eea01a" : "#ed4245" }} />
+            
+            <IconButton color="inherit" onClick={() => { 
+              if (!user.isSignedIn){
+                setOpenSignInDialog(true)
+              }
+              else{
+                addSnackBar("Already Signed In", "info")
+              }
+               }}>
+              <AccountCircleIcon sx={{ color: user.isSignedIn ? "#3ba55d" : "#ed4245" }} />
             </IconButton>
-            </Link>
+          
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={drawerOpen}>

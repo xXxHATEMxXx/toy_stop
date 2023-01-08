@@ -9,11 +9,12 @@ if mydb.cursor:
   print("connection sucssful")
 mycursor = mydb.cursor()
 
-mycursor.execute("SELECT * FROM items")
+mycursor.execute("SELECT * FROM users")
 
 myresult = mycursor.fetchall()
 
 allData = []
 for item in myresult:
-    allData.append({"id": item[0], "name": item[1], "type": item[2], "discripsion": item[3], "price": item[4], "imageName":item[5]})
-print(allData)
+    allData.append(item[0], item[1],  item[2], item[3])
+print(myresult)
+
