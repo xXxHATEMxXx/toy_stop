@@ -20,7 +20,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import { useState, useEffect } from 'react';
-//import ItemShop from './components/ItemShop';
+import Item from './components/Item';
 
 
 function Copyright(props) {
@@ -43,12 +43,21 @@ export default function ShopView(props) {
     currentpage,
     setCurrentpage,
     test,
-    allData} = props
-    console.log("allData");
-  console.log(allData);
+    labledData} = props
   return (
     <>
-
+      <Toolbar />
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Grid container spacing={3}>
+          {/* Chart */}
+          {labledData && labledData.map(item =>{
+            
+          return(<Grid key={item.id} item xs={12} md={4} lg={3}>
+              <Item item={item}  {...props}/>
+          </Grid>)})}
+        </Grid>
+        <Copyright sx={{ pt: 4 }} />
+      </Container>
     </>
   );
 }

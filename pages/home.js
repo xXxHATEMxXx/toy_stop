@@ -20,7 +20,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -42,9 +41,27 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { saveAs } from 'file-saver';
-
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
 import ShopView from './shopView';
+
+import { AllOutSharp } from '@mui/icons-material';
+
+export const nbaTeams = [
+  { id: 1, name: '10' },
+  { id: 2, name: '20' },
+  { id: 3, name: '30' },
+  { id: 4, name: '40' },
+  { id: 5, name: '50' },
+  { id: 6, name: '60' },
+  { id: 7, name: '100' },
+  { id: 8, name: '150' },
+  { id: 9, name: '200' },
+  { id: 10, name: '300' },
+  { id: 10, name: '400' },
+];
 
 const validateEmail = (email) => {
   return String(email)
@@ -129,9 +146,6 @@ export const secondaryListItems = (
 );
 const drawerWidth = 240;
 
-ingify(jsonObject)], {type : 'application/json'});
-saveAs(blob, 'abc.json');
-
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -169,7 +183,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         }),
         width: theme.spacing(7),
         [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
+          width: theme.spacing(0),
         },
       }),
     },
@@ -177,18 +191,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 class User {
-  constructor(handleServerResponse, forceRender) {
+  constructor(addSnackBar, handleServerResponse, forceRender) {
+    this.addSnackBar = addSnackBar
     this.handleServerResponse = handleServerResponse
     this.forceRender = forceRender
     this.isConnected = false
     this.isSignedIn = false
     this.isTryingToConnect = false
     this.socket = null
+    this.isDataLoaded = false
 
   }
 
   handleConntion() {
     if (!this.isConnected && !this.isTryingToConnect) {
+      this.addSnackBar("Trying To Connect...", "info")
       this.isTryingToConnect = true
       this.forceRender()
       try {
@@ -198,8 +215,9 @@ class User {
           //console.log("[open] Connection established");
           //console.log("Sending to server");
           this.isTryingToConnect = false
-          this.handleConnected()
           this.forceRender()
+          this.handleConnected()
+
 
         };
 
@@ -233,6 +251,7 @@ class User {
           this.forceRender()
         };
         this.socket.onerror = (error) => {
+          //this.addSnackBar(`[error] ${error.message}`);
           if (this.isConnected) {
             this.handleConnectionError()
           } else {
@@ -243,47 +262,60 @@ class User {
           this.forceRender()
         };
       } catch (e) {
+        this.addSnackBar(e)
         this.isTryingToConnect = false
+        this.forceRender()
         if (this.isConnected) {
           this.handleConnectionError()
         } else {
           this.handleUnableToConnect()
         }
-        this.forceRender()
+
       }
 
     } else {
+      this.addSnackBar("Already Connected", "success")
       this.forceRender()
     }
   }
 
   handleConnected() {
+    this.addSnackBar("Connected", "success")
     this.isConnected = true
+    this.forceRender()
   }
 
   handleDisconnected(clean) {
     if (clean) {
+      this.addSnackBar("Disconnected", "warning")
       this.isConnected = false
+      this.forceRender()
       this.handleSignOut()
     } else {
+      this.addSnackBar("Disconnected", "error")
       this.isConnected = false
+      this.forceRender()
       this.handleSignOut()
     }
   }
 
   handleUnableToConnect() {
+    this.addSnackBar("Unable To Connect", "error")
     this.isConnected = false
+    this.forceRender()
     this.handleSignOut()
   }
 
   handleConnectionError() {
+    this.addSnackBar("Connection Error", "error")
     this.isConnected = false
+    this.forceRender()
     this.handleSignOut()
   }
 
   handleSignUp() {
     if (!this.isConnected) {
-      this.this.connect()
+      this.connect()
     }
     if (signUp.data.password !== signUp.data.confirmPassword) {
       setSignUp(signUp => ({
@@ -342,11 +374,14 @@ class User {
         }
       }));
     }
+    this.forceRender()
   }
 
   onSignUp(serverResponse) {
     if (serverResponse.status === true) {
+      this.addSnackBar("Signed Up successfully", "success")
     } else {
+      this.addSnackBar("Fiald To Sign Up", "error")
     }
   }
 
@@ -365,8 +400,10 @@ class User {
 
   onSignIn(response) {
     if (response.status === true) {
+      this.addSnackBar("Signed In Successfully", "success")
       setSignIn(this.defaultData.input.signIn)
     } else {
+      this.addSnackBar(response.data.message, "error")
     }
   }
 
@@ -374,12 +411,14 @@ class User {
     if (this.isSignedIn) {
       this.isSignedIn = false
       this.socket.send(JSON.stringify({ function: "signOut", data: {} }))
+      this.addSnackBar("Signed Out", "warning")
     }
   }
 
   onSignOut() {
     this.socket.send(JSON.stringify({ function: "signOut", data: {} }))
     console.log(this.user)
+    this.addSnackBar("Signed Out", "warning")
   }
 
   connect() {
@@ -387,6 +426,7 @@ class User {
       this.handleConntion()
     }
     else {
+      this.addSnackBar("Already Trying To Connect", "info")
     }
   }
 
@@ -394,9 +434,9 @@ class User {
     if (this.isConnected) {
       this.socket.send(JSON.stringify(data))
     } else {
-      if (!this.isTryingToConnect){
+      if (!this.isTryingToConnect) {
         this.connect()
-      }  
+      }
     }
   }
 }
@@ -406,152 +446,19 @@ const mdTheme = createTheme();
 export default function Main() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [currentpage, setCurrentpage] = useState("Home")
-  const [allData, setAllData] = useState([{id:0, name:"", imageName:"", description:"", price:0}])
-  
-  const jsonObject =  [
-    {'id': 1,
-    'name': 'Teddy Bear',
-    'type': 'LotFancy',
-    'discripsion': 'A cute teddy bear',
-    'price': Decimal('14.99'),
-    'imageName': 'teddy-bear.png'
-    },
-    {'id': 2,
-    'name': 'Doll', 
-    'type': 'Barbie', 
-    'discripsion': 'A sweet doll', 
-    'price': Decimal('9.48'), 
-    'imageName': 'doll.png'
-    },
-    {'id': 3, 
-    'name': 'Toy Car 1', 
-    'type': 'Hot Wheels', 
-    'discripsion': 'A cute datsun toy car', 
-    'price': Decimal('57.14'), 
-    'imageName': 'toy-car-1.png'
-    },
-    {'id': 4, 
-    'name': 'Toy Car 2', 
-    'type': 'Hot Wheels', 
-    'discripsion': 'A cute ford toy truck', 
-    'price': Decimal('39.99'), 
-    'imageName': 'toy-car-2.png'
-    },
-    {'id': 5, 
-    'name': 'Toy Car 3', 
-    'type': 'Hot Wheels', 
-    'discripsion': 'A cute mercedes toy racecar', 
-    'price': Decimal('54.74'), 
-    'imageName': 'toy-car-3.png'
-    }, 
-    {'id': 6, 'name': 'Lego Classics', 
-    'type': 'Lego', 
-    'discripsion': 'A cute lego monsters set', 
-    'price': Decimal('9.97'), 
-    'imageName': 'lego-monsters.png'
-    },
-    {'id': 7, 
-    'name': 'Lego Dots', 
-    'type': 'Lego', 
-    'discripsion': 'A cute lego dots set', 
-    'price': Decimal('17.94'), 
-    'imageName': 'lego-dots.png'
-    }, 
-    {'id': 8, 
-    'name': 'Sweet Jumperoo', 
-    'type': 'Fisher-Price', 
-    'discripsion': 'A sweet ride jumperoo', 
-    'price': Decimal('124.99'), 
-    'imageName': 'ride-jumperoo.png'
-    }, 
-    {'id': 9, 
-    'name': 'Musical Keyboard', 
-    'type': 'CoComelon', 
-    'discripsion': 'A sweet musical keyboard', 
-    'price': Decimal('26.99'), 
-    'imageName': 'musical-keyboard.png'
-    }, 
-    {'id': 10, 
-    'name': 'T-Shirt & Shorts Set 1', 
-    'type': 'CoComelon', 
-    'discripsion': 'A sweet t-shirt & shorts set', 
-    'price': Decimal('18.99'), 
-    'imageName': 'tshirt-shorts-1.png'
-    }, 
-    {'id': 11, 
-    'name': 'T-Shirt & Shorts Set 2', 
-    'type': 'CoComelon', 
-    'discripsion': 'A sweet t-shirt & shorts set', 
-    'price': Decimal('18.99'), 
-    'imageName': 'tshirt-shorts-2.png'
-    }, 
-    {'id': 12, 
-    'name': 'T-Shirt & Shorts Set 3', 
-    'type': 'CoComelon', 
-    'discripsion': 'A sweet t-shirt & shorts set', 
-    'price': Decimal('18.99'), 
-    'imageName': 'tshirt-shorts-3.png'
-    }, 
-    {'id': 13, 
-    'name': 'N-Strike Blaster', 
-    'type': 'Nerf', 
-    'discripsion': 'A powerful blaster gun', 
-    'price': Decimal('34.99'), 
-    'imageName': 'strike-blaster.png'
-    }, 
-    {'id': 14, 
-    'name': 'Baby Mickey Mouse', 
-    'type': 'Disney', 
-    'discripsion': 'A sweet baby Mickey plush', 
-    'price': Decimal('18.88'), 
-    'imageName': 'baby-mickey.png'
-    }, 
-    {'id': 15, 
-    'name': 'Baby Minnie Mouse', 
-    'type': 'Disney', 
-    'discripsion': 'A sweet baby Minnie plush', 
-    'price': Decimal('51.23'), 
-    'imageName': 'baby-minnie.png'
-    }, 
-    {'id': 16, 
-    'name': '3D Toddler Scooter', 
-    'type': 'Bluey', 
-    'discripsion': 'A fantastic 3-wheel scooter', 
-    'price': Decimal('29.00'), 
-    'imageName': 'toddler-scooter.png'
-    }, 
-    {'id': 17, 
-    'name': 'Cottage Playhouse', 
-    'type': 'Litte Tikes', 
-    'discripsion': 'A fancy blue playhouse', 
-    'price': Decimal('139.99'), 
-    'imageName': 'cottage-playhouse.png'
-    }, 
-    {'id': 18, 
-    'name': '2-in-1 Motor/Wood Shop', 
-    'type': 'Little Tikes', 
-    'discripsion': 'A realistic motor/wood shop', 
-    'price': Decimal('99.00'), 
-    'imageName': '2x1-motor-shop.png'
-    }, 
-    {'id': 19, 
-    'name': 'UNO Collector Tin', 
-    'type': 'UNO', 
-    'discripsion': 'A premium quality uno set', 
-    'price': Decimal('49.39'), 
-    'imageName': 'uno-phase10-snappy.png'
-    }, 
-    {'id': 20, 
-    'name': 'Razor MX350 Bike', 
-    'type': 'Razor', 
-    'discripsion': 'A powerful electric bike', 
-    'price': Decimal('328.00'), 
-    'imageName': 'mx350-bike.png'
-    }
-    ]
-  
-    const blob = new Blob([JSON.stringify(jsonObject)], {type : 'application/json'});
-    saveAs(blob, 'abc.json');
+  const [allData, setAllData] = useState([{ id: 0, name: "", imageName: "", description: "", price: 0 }])
+  const [labledData, setLabledData] = useState([{ id: 0, name: "", imageName: "", description: "", price: 0 }])
+  const [listOfTypes, setListOfTypes] = useState([])
+  const { enqueueSnackbar } = useSnackbar();
+  const [renderForce, setRenderForce] = useState(false)
+  const forceRender = () => {
+    setRenderForce(!renderForce)
+    console.log(renderForce)
+  }
+  const addSnackBar = (msg, variant) => {
+    enqueueSnackbar(msg, { variant: variant });
+  };
+  const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
   const handleServerResponse = (serverResponse) => {
@@ -574,42 +481,52 @@ export default function Main() {
         break;
       case "onGetAllData":
         setAllData(serverResponse.data.allData)
+        setLabledData(serverResponse.data.allData)
+        let list = {}
+        serverResponse.data.allData.map(item => {
+          list[item.type] = false
+        })
+        setListOfTypes(list)
+        forceRender()
         break;
       default:
       // code block
     }
   }
-
-  const [renderForce, setRenderForce] = useState(false)
-  const forceRender = () => {
-    setRenderForce(!renderForce)
+  function filterSearch(value) {
+    const results = allData.filter((item) => {
+      return (item?.name.toLowerCase().includes(value.toLowerCase()));
+    });
+    return results
   }
-  const [user, setUser] = useState(new User(handleServerResponse, forceRender))
   const test = () => {
-    user.send({function:"getAllData", data:{}})
+
   }
+  const [user, setUser] = useState(new User(addSnackBar, handleServerResponse, forceRender))
   const mainProps = {
     user,
     currentpage,
     setCurrentpage,
     test,
-    allData
+    labledData
   }
 
-  const MINUTE_MS = 5000;
+  const MINUTE_MS = 1000;
 
   useEffect(() => {
     const interval = setInterval(() => {
       // user.send({function:"ping", data:{message:""}})
       if (user.isConnected) {
-          user.send({function:"getAllData", data:{}})
+        if (!user.isDataLoaded) {
+          user.send({ function: "getAllData", data: {} })
+          user.isDataLoaded = true
+        }
       }
 
     }, MINUTE_MS);
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [])
-
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -643,11 +560,42 @@ export default function Main() {
             >
               {currentpage}
             </Typography>
+            <Autocomplete
+              disablePortal
+              sx={{ width: 400, bgcolor: 'white', m: 0.5, borderColor: "#e57627" }}
+              options={allData}
+              autoHighlight
+              getOptionLabel={(option) => option.name}
+              renderOption={(props, option) => {
+                return (
+                  <Box component="li" {...props}>
+                    {option.name}
+                  </Box>
+                )
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="search"
+                  fullWidth
+                  onChange={(e) => {
+                    setLabledData(allData.filter((item) => { return (item?.name.toLowerCase().includes(e.target.value.toLowerCase())) }))
+                  }}
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: 'new-password', // disable autocomplete and autofill
+                  }}
+                />
+              )}
+              onChange={(e, value) => {
+                try {
+
+                } catch (exception_var) {
+                }
+              }}
+            />
             <IconButton color="inherit" onClick={() => { user.connect(); }}>
               <SettingsInputAntennaIcon sx={{ color: user.isConnected ? "#3ba55d" : user.isTryingToConnect ? "#eea01a" : "#ed4245" }} />
-            </IconButton>
-            <IconButton color="inherit" onClick={() => { test() }}>
-              <SettingsInputAntennaIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -666,8 +614,46 @@ export default function Main() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            <ListSubheader component="div" inset>
+              Filler Type
+            </ListSubheader>
+            {user.isDataLoaded && Object.keys(listOfTypes).map((item, index) => {
+              return (
+                <>
+                  <FormControlLabel
+                    value="end"
+                    key={item}
+                    control={<Checkbox key={item} onChange={e => {
+                      let list = listOfTypes
+                      list[item] = e.target.checked
+                      setListOfTypes(list)
+                      if (Object.values(list).every(element => element === false)) {
+                        setLabledData(allData)
+                      } else (
+                        setLabledData(allData.filter((item) => { return (list[item?.type]) }))
+                      )
+                    }} />}
+                    label={item}
+                    labelPlacement="end"
+                    sx={{
+                      ml: 2,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'left',
+                    }}
+
+                  />
+                </>
+
+              )
+            })
+
+            }
+
             <Divider sx={{ my: 1 }} />
+            <ListSubheader component="div" inset>
+              low
+            </ListSubheader>
             {secondaryListItems}
           </List>
         </Drawer>
@@ -683,7 +669,8 @@ export default function Main() {
             overflow: 'auto',
           }}
         >
-          <ShopView {...mainProps}/>
+
+          <ShopView {...mainProps} />
         </Box>
       </Box>
     </ThemeProvider>
