@@ -1,12 +1,14 @@
 import * as React from 'react';
 import Home from './home';
-import { SnackbarProvider } from "notistack";
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 
 export default function Index() {
+  const providerRef = React.useRef();
+
   return (  
-    <SnackbarProvider maxSnack={2} preventDuplicate>
-       <Home />
+    <SnackbarProvider ref={providerRef} maxSnack={2} preventDuplicate>
+       <Home/>
     </SnackbarProvider>
   );
 }

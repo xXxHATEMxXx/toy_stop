@@ -39,7 +39,7 @@ export default function ShoppingCartDialog(props) {
     labledData,
      } = props
 
-  const handleCloseSignInDialog = () => {
+  const handleCloseShoppingCartDialog = () => {
     setOpenShoppingCartDialog(false)
 
   }
@@ -47,7 +47,7 @@ export default function ShoppingCartDialog(props) {
     <Dialog
       fullScreen
       open={openShoppingCartDialog}
-      onClose={handleCloseSignInDialog}
+      onClose={handleCloseShoppingCartDialog}
       TransitionComponent={Transition}
     >
       <AppBar sx={{ position: 'sticky' }}>
@@ -55,7 +55,7 @@ export default function ShoppingCartDialog(props) {
           <IconButton
             edge="start"
             color="inherit"
-            onClick={handleCloseSignInDialog}
+            onClick={handleCloseShoppingCartDialog}
             aria-label="close"
           >
             <CloseIcon />

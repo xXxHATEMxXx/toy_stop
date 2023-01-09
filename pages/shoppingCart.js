@@ -58,7 +58,7 @@ export default function ShoppingCart(props) {
           {labledData && Object.keys(user.cart).map(itemId =>{
             console.log()
             let item = labledData.filter((item) => { return (item.id == itemId) })[0]
-            
+            item.q = user.cart[itemId]
           return(<Grid key={item} item xs={12} md={4} lg={3}>
               <Item item={item}  {...props}/>
           </Grid>)})}

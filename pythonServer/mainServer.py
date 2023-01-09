@@ -10,6 +10,17 @@ mydb = mysql.connector.connect(
 if mydb.cursor:
   print("connection sucssful")
 
+def insertUser(data1,data2,data3,data4):
+  mycursor = mydb.cursor()
+
+  sql = "INSERT INTO users (email, password, firstName, lastName) VALUES (%s, %s, %s, %s)"
+  val = (data1, data2, data3, data4)
+  mycursor.execute(sql, val)
+
+  mydb.commit()
+
+  print(mycursor.rowcount, "record inserted.")
+
 def insertCart(data1,data2,user):
     
     mycursor = mydb.cursor()
@@ -102,9 +113,35 @@ def signIn(data, client):
   print("wrong username")
   return {"function":"onSignIn", "data":{'status':2}}
 
+def signUp(data, client):
+  email = data.get("email")
+  password = data.get("password")
+  firstName = data.get("firstName")
+  lastName = data.get("lastName")
+  mycursor = mydb.cursor()
 
+  mycursor.execute("SELECT * FROM users")
 
-
+  cartResult = mycursor.fetchall()
+  
+  cartData = []
+  user = client.username
+  for item in cartResult:
+    cartData.append ({"email": item[0], "password": item[1], "firstName": item[2], "lastName": item[3]})
+  print(cartData)
+  for i in cartData:
+    value_email=(i.get("email"))
+      
+    value_password=(i.get("password"))
+    value_firstName= (i.get("firstName"))
+    value_lastName= (i.get("lastName"))
+    if email in value_email:
+      print("email has been signed in before")
+      return {"function": "onAddToShoppingCart", "data":{"status": "1"}}
+      
+    elif email not in value_email:
+      insertUser(email,password,firstName,lastName)
+      return {"function": "onSignUp", "data":{ "status": "0"}}
 
 def addToCart(data, client):
   mycursor = mydb.cursor()
@@ -146,8 +183,9 @@ def addToCart(data, client):
       elif userCartId not in x:
         x.append(userCartId)
         y.append("1")
-        del x[0]
-        del y[0]
+        if len(x)==1:
+          del x[0]
+          del y[0]
         print("2")
         insertCart(x,y,z)
         client.cart = {}
@@ -224,7 +262,8 @@ if __name__ == "__main__":
     resposeFunctions = {"ping": ping,
                         "getAllData": get_all_data,
                         "addToCart": addToCart,
-                        "signIn": signIn}
+                        "signIn": signIn,
+                        "signUp":signUp}
     serveIp, port = "127.0.0.1", 7000
     server = AnasServer(serveIp, port, resposeFunctions)
     server.run()

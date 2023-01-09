@@ -50,7 +50,7 @@ export default function Item(props) {
           <RemoveIcon />
         </IconButton>
         <Typography variant="body1" color="text.primary">
-          {item?.price}
+          {item.q ? String(item?.price) + "$" + " X " + String(item.q) : String(item?.price) + "$"}
         </Typography>
       </CardActions>
     </Card>

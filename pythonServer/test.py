@@ -53,7 +53,7 @@ if mydb.cursor:
     
 
   userCartId = '1'
-  userCartMode = '-'
+  userCartMode = '+'
   if userCartMode == "+":
     for i in cartData:
 
@@ -67,8 +67,11 @@ if mydb.cursor:
 
         x.append(userCartId)
         y.append("1")
-        del x[0]
-        del y[0]
+        if len(x)==1:
+          del x[0]
+          del y[0]
+
+
         print (x)
         print (y)
         print("2")

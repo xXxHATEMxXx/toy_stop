@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { SnackbarProvider, useSnackbar } from 'notistack';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -50,10 +49,11 @@ import FormControl from '@mui/material/FormControl';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
 import { AllOutSharp, CardTravel } from '@mui/icons-material';
 import SignInDialog from './signInDialog';
 import ShoppingCartDialog from './shoppingCartDialog';
+import SignUpDialog from './signUpDialog';
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 export const nbaTeams = [
   { id: 1, name: '10' },
@@ -218,7 +218,7 @@ class User {
       this.isTryingToConnect = true
       this.forceRender()
       try {
-        this.socket = new WebSocket('ws://127.0.0.1:7000')
+        this.socket = new WebSocket('ws://179.61.219.171:7000')
         this.socket.onopen = (e) => {
           //console.log(e.eventPhase == e.BUBBLING_PHASE)
           //console.log("[open] Connection established");
@@ -452,25 +452,28 @@ class User {
 
 const mdTheme = createTheme();
 
-export default function Main() {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+export default function Home(props) {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentpage, setCurrentpage] = useState("Home")
   const [allData, setAllData] = useState([{ id: 0, name: "", imageName: "", description: "", price: 0 }])
   const [labledData, setLabledData] = useState([{ id: 0, name: "", imageName: "", description: "", price: 0 }])
   const [listOfTypes, setListOfTypes] = useState([])
-  const { enqueueSnackbar } = useSnackbar();
   const [renderForce, setRenderForce] = useState(false)
   const [openSignInDialog, setOpenSignInDialog] = useState(false)
   const [openSignUpDialog, setOpenSignUpDialog] = useState(false)
   const [openShoppingCartDialog, setOpenShoppingCartDialog] = useState(false)
-  
+  const providerRef = React.useRef();
+
+    const addSnackBar = (msg, variant) => {
+        providerRef.current.enqueueSnackbar(msg, {
+            variant: variant,
+          });
+    }
   const forceRender = () => {
     setRenderForce(!renderForce)
     console.log(renderForce)
   }
-  const addSnackBar = (msg, variant) => {
-    enqueueSnackbar(msg, { variant: variant });
-  };
+
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -487,12 +490,15 @@ export default function Main() {
           user.cart = serverResponse.data.shoppingCart
           addSnackBar("Signed in as " + serverResponse.data.user, "success")
           setOpenSignInDialog(false)
+          forceRender()
         }
         else if (serverResponse.data.status == 1) {
           addSnackBar("Wrong Password", "error")
+          forceRender()
         }
         else if (serverResponse.data.status == 2) {
           addSnackBar("Wrong Username", "error")
+          forceRender()
         }
         break;
       case "onGetAllData":
@@ -505,12 +511,22 @@ export default function Main() {
         setListOfTypes(list)
         forceRender()}
         break;
+      case "onSignUp":
+        if (serverResponse.data.status == "0") {
+          setOpenSignUpDialog(false)
+          setOpenSignInDialog(true)
+        }else{
+
+        }
+        break;
       case "onAddToShoppingCart":
         if (serverResponse.data.status == "5"){
           addSnackBar("This Item is not in cart", "error")
+          forceRender()
         } else {
           addSnackBar("Operation Success", "success")
           user.cart = serverResponse.data.newCart
+          forceRender()
         }
         break;
 
@@ -525,7 +541,6 @@ export default function Main() {
     return results
   }
   const test = () => {
-
   }
   const [user, setUser] = useState(new User(addSnackBar, handleServerResponse, forceRender))
   const mainProps = {
@@ -553,9 +568,19 @@ export default function Main() {
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [])
   return (
+    <SnackbarProvider ref={providerRef} maxSnack={2} preventDuplicate>
     <ThemeProvider theme={mdTheme}>
-      <SignInDialog openSignInDialog={openSignInDialog}
-        setOpenSignInDialog={setOpenSignInDialog} {...mainProps} />
+        
+      <SignInDialog 
+        openSignInDialog = {openSignInDialog}
+        setOpenSignInDialog = {setOpenSignInDialog}
+        openSignUpDialog = {openSignUpDialog}
+        setOpenSignUpDialog = {setOpenSignUpDialog} {...mainProps} />
+      <SignUpDialog 
+        openSignInDialog = {openSignInDialog}
+        setOpenSignInDialog = {setOpenSignInDialog}
+        openSignUpDialog = {openSignUpDialog}
+        setOpenSignUpDialog = {setOpenSignUpDialog} {...mainProps} />
         <ShoppingCartDialog openShoppingCartDialog={openShoppingCartDialog}
         setOpenShoppingCartDialog={setOpenShoppingCartDialog} {...mainProps} />
       <Box sx={{ display: 'flex' }}>
@@ -754,5 +779,6 @@ export default function Main() {
         </Box>
       </Box>
     </ThemeProvider>
+    </SnackbarProvider>
   );
 }

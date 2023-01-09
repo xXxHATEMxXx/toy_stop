@@ -1,9 +1,8 @@
-CREATE TABLE IF NOT EXISTS `Users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `email` VARCHAR(255) NOT NULL ,
   `password` varchar(255) NOT NULL,
   `firstName` varchar(255) NOT NULL,
   `LastName` varchar(255) NOT NULL,
-  PRIMARY KEY (`email`)
 );
 
 INSERT INTO `users` (`email`, `password`, `firstName`, `LastName`) VALUES

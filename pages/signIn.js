@@ -31,12 +31,14 @@ const theme = createTheme();
 export default function SignIn(props) {
   const { 
     openSignInDialog,
-    setOpenSignInDialog, 
+    setOpenSignInDialog,
+    openSignUpDialog,
+    setOpenSignUpDialog,
     user,
     currentpage,
     setCurrentpage,
     test,
-    labledData, } = props
+    labledData,} = props
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -92,10 +94,6 @@ export default function SignIn(props) {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -104,18 +102,18 @@ export default function SignIn(props) {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={(e) => { 
+                setOpenSignInDialog(false)
+                setOpenSignUpDialog(true)
+              }}
+            >
+              Don't have an account? Sign Up
+            </Button>
+            
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

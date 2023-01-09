@@ -20,13 +20,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignIn from './signIn';
+import SignUp from './signUp';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function SignInDialog(props) {
+export default function SignUpDialog(props) {
   const { 
     openSignInDialog,
     setOpenSignInDialog,
@@ -38,15 +39,15 @@ export default function SignInDialog(props) {
     test,
     labledData,} = props
 
-const handleCloseSignInDialog=()=>{
-  setOpenSignInDialog(false)
+const handleCloseSignUpDialog=()=>{
+  setOpenSignUpDialog(false)
 
 }
   return (
     <Dialog
       fullScreen
-      open={openSignInDialog}
-      onClose={handleCloseSignInDialog}
+      open={openSignUpDialog}
+      onClose={handleCloseSignUpDialog}
       TransitionComponent={Transition}
     >
       <AppBar sx={{ position: 'sticky' }}>
@@ -54,7 +55,7 @@ const handleCloseSignInDialog=()=>{
           <IconButton
             edge="start"
             color="inherit"
-            onClick={handleCloseSignInDialog}
+            onClick={handleCloseSignUpDialog}
             aria-label="close"
           >
             <CloseIcon />
@@ -64,7 +65,7 @@ const handleCloseSignInDialog=()=>{
           </Typography>
         </Toolbar>
       </AppBar>
-    <SignIn {...props}/>
+    <SignUp {...props}/>
     
     </Dialog>
   );
