@@ -455,8 +455,8 @@ const mdTheme = createTheme();
 export default function Home(props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentpage, setCurrentpage] = useState("Home")
-  const [allData, setAllData] = useState([{ id: 0, name: "", imageName: "", description: "", price: 0 }])
-  const [labledData, setLabledData] = useState([{ id: 0, name: "", imageName: "", description: "", price: 0 }])
+  const [allData, setAllData] = useState([{ id: 0, name: "", imageName: "", description: "", price: 0, q:0 }])
+  const [labledData, setLabledData] = useState([{ id: 0, name: "", imageName: "", description: "", price: 0, q:0 }])
   const [listOfTypes, setListOfTypes] = useState([])
   const [renderForce, setRenderForce] = useState(false)
   const [openSignInDialog, setOpenSignInDialog] = useState(false)
