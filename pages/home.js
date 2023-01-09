@@ -209,6 +209,7 @@ class User {
     this.firstName = "Guest"
     this.lastName = ""
     this.username = ""
+    this.cart = {0:0}
 
   }
 
