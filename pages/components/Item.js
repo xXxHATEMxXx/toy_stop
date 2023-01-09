@@ -21,9 +21,6 @@ export default function Item(props) {
     setCurrentpage,
     test,
     labledData } = props
-    if (item.q === undefined) {
-      item.q = ""
-    }
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -53,7 +50,7 @@ export default function Item(props) {
           <RemoveIcon />
         </IconButton>
         <Typography variant="body1" color="text.primary">
-          {item.q ? String(item?.price) + "$" + " X " + String(item.q) : String(item?.price) + "$"}
+          {item.q !== undefined ? String(item?.price) + "$" + " X " + String(item.q) : String(item?.price) + "$"}
         </Typography>
       </CardActions>
     </Card>
