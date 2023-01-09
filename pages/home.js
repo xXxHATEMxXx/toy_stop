@@ -51,8 +51,9 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-import { AllOutSharp } from '@mui/icons-material';
+import { AllOutSharp, CardTravel } from '@mui/icons-material';
 import SignInDialog from './signInDialog';
+import ShoppingCartDialog from './shoppingCartDialog';
 
 export const nbaTeams = [
   { id: 1, name: '10' },
@@ -483,10 +484,9 @@ export default function Main() {
           user.firstName = serverResponse.data.firstName
           user.lastName = serverResponse.data.lastName
           user.username = serverResponse.data.user
+          user.cart = serverResponse.data.shoppingCart
           addSnackBar("Signed in as " + serverResponse.data.user, "success")
           setOpenSignInDialog(false)
-
-
         }
         else if (serverResponse.data.status == 1) {
           addSnackBar("Wrong Password", "error")
@@ -496,15 +496,24 @@ export default function Main() {
         }
         break;
       case "onGetAllData":
-        setAllData(serverResponse.data.allData)
+        {setAllData(serverResponse.data.allData)
         setLabledData(serverResponse.data.allData)
         let list = {}
         serverResponse.data.allData.map(item => {
           list[item.type] = false
         })
         setListOfTypes(list)
-        forceRender()
+        forceRender()}
         break;
+      case "onAddToShoppingCart":
+        if (serverResponse.data.status == "5"){
+          addSnackBar("This Item is not in cart", "error")
+        } else {
+          addSnackBar("Operation Success", "success")
+          user.cart = serverResponse.data.newCart
+        }
+        break;
+
       default:
       // code block
     }
@@ -524,7 +533,7 @@ export default function Main() {
     currentpage,
     setCurrentpage,
     test,
-    labledData
+    labledData,
   }
 
   const MINUTE_MS = 1000;
@@ -547,6 +556,8 @@ export default function Main() {
     <ThemeProvider theme={mdTheme}>
       <SignInDialog openSignInDialog={openSignInDialog}
         setOpenSignInDialog={setOpenSignInDialog} {...mainProps} />
+        <ShoppingCartDialog openShoppingCartDialog={openShoppingCartDialog}
+        setOpenShoppingCartDialog={setOpenShoppingCartDialog} {...mainProps} />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={drawerOpen}>
@@ -615,8 +626,16 @@ export default function Main() {
             <IconButton color="inherit" onClick={() => { user.connect(); }}>
               <SettingsInputAntennaIcon sx={{ color: user.isConnected ? "#3ba55d" : user.isTryingToConnect ? "#eea01a" : "#ed4245" }} />
             </IconButton>
-
-
+            <IconButton color="inherit" onClick={() => {
+              if (!user.isSignedIn) {
+                setOpenSignInDialog(true)
+              }
+              else {
+                setOpenShoppingCartDialog(true)
+              }
+            }}>
+              <ShoppingCartIcon sx={{ color: user.isSignedIn ? "#3ba55d" : "#ed4245" }} />
+            </IconButton>
             <IconButton color="inherit" onClick={() => {
               if (!user.isSignedIn) {
                 setOpenSignInDialog(true)

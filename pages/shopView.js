@@ -43,7 +43,7 @@ export default function ShopView(props) {
     currentpage,
     setCurrentpage,
     test,
-    labledData} = props
+    labledData,} = props
   return (
     <>
       <Toolbar />

@@ -46,16 +46,20 @@ export default function ShoppingCart(props) {
         currentpage,
         setCurrentpage,
         test,
-        labledData } = props
+        labledData, 
+        } = props
+  console.log()
   return (
     <>
       <Toolbar />
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={3}>
           {/* Chart */}
-          {labledData && labledData.map(item =>{
+          {labledData && Object.keys(user.cart).map(itemId =>{
+            console.log()
+            let item = labledData.filter((item) => { return (item.id == itemId) })[0]
             
-          return(<Grid key={item.id} item xs={12} md={4} lg={3}>
+          return(<Grid key={item} item xs={12} md={4} lg={3}>
               <Item item={item}  {...props}/>
           </Grid>)})}
         </Grid>

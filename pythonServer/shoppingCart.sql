@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `shoppingCart` (
   `email` VARCHAR(255) NOT NULL ,
-  `ID_ITEMS` varchar(255) NOT NULL,
+  `ID_ITEMS` varchar(255) NOT NULL ,
   `Quantity` varchar(255) NOT NULL,
   PRIMARY KEY (`email`)
 );

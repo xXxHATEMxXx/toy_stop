@@ -36,7 +36,7 @@ export default function SignIn(props) {
     currentpage,
     setCurrentpage,
     test,
-    labledData } = props
+    labledData, } = props
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

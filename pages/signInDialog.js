@@ -34,7 +34,7 @@ export default function SignInDialog(props) {
     currentpage,
     setCurrentpage,
     test,
-    labledData } = props
+    labledData,} = props
 
 const handleCloseSignInDialog=()=>{
   setOpenSignInDialog(false)

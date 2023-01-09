@@ -22,8 +22,6 @@ export default function Item(props) {
     test,
     labledData } = props
   return (
-
-
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"

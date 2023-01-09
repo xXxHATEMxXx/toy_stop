@@ -20,13 +20,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignIn from './signIn';
+import ShoppingCart from './shoppingCart';
+import ShopView from './shopView';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function SignInDialog(props) {
+export default function ShoppingCartDialog(props) {
   const { 
     openShoppingCartDialog,
     setOpenShoppingCartDialog,
@@ -34,16 +36,17 @@ export default function SignInDialog(props) {
     currentpage,
     setCurrentpage,
     test,
-    labledData } = props
+    labledData,
+     } = props
 
   const handleCloseSignInDialog = () => {
-    setOpenSignInDialog(false)
+    setOpenShoppingCartDialog(false)
 
   }
   return (
     <Dialog
       fullScreen
-      open={openSignInDialog}
+      open={openShoppingCartDialog}
       onClose={handleCloseSignInDialog}
       TransitionComponent={Transition}
     >
@@ -62,7 +65,7 @@ export default function SignInDialog(props) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <SignIn {...props} />
+      <ShoppingCart {...props} />
 
     </Dialog>
   );
