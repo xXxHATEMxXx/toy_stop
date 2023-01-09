@@ -21,6 +21,9 @@ export default function Item(props) {
     setCurrentpage,
     test,
     labledData } = props
+    if (item.q === undefined) {
+      item.q = ""
+    }
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
