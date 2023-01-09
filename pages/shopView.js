@@ -51,7 +51,9 @@ export default function ShopView(props) {
         <Grid container spacing={3}>
           {/* Chart */}
           {labledData && labledData.map(item =>{
-            item.q = " "
+            if (item.q === undefined) {
+              item.q = ""
+            }
           return(<Grid key={item.id} item xs={12} md={4} lg={3}>
               <Item item={item}  {...props}/>
           </Grid>)})}
