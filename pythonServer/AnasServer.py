@@ -3,7 +3,6 @@ import asyncio
 import json
 from random import randint
 from sqlite3 import connect
-from tkinter.filedialog import asksaveasfile
 import websockets
 import locale
 from datetime import datetime

@@ -264,7 +264,7 @@ if __name__ == "__main__":
                         "addToCart": addToCart,
                         "signIn": signIn,
                         "signUp":signUp}
-    serveIp, port = "127.0.0.1", 7000
+    serveIp, port = "179.61.219.171", 7000
     server = AnasServer(serveIp, port, resposeFunctions)
     server.run()
 
